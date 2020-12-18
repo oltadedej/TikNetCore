@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversityTik", "UniversityTik.csproj", "{16955361-ABD4-4CD6-9070-24D1FBD53BFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversityTik_Db", "..\UniversityTik_Db\UniversityTik_Db.csproj", "{158C9003-C6F4-42FC-A5D6-9FFB19AA30FF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16955361-ABD4-4CD6-9070-24D1FBD53BFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16955361-ABD4-4CD6-9070-24D1FBD53BFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16955361-ABD4-4CD6-9070-24D1FBD53BFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16955361-ABD4-4CD6-9070-24D1FBD53BFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{158C9003-C6F4-42FC-A5D6-9FFB19AA30FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{158C9003-C6F4-42FC-A5D6-9FFB19AA30FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{158C9003-C6F4-42FC-A5D6-9FFB19AA30FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{158C9003-C6F4-42FC-A5D6-9FFB19AA30FF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6501CB0D-57BF-4842-AE8C-4A1A1211474D}
+	EndGlobalSection
+EndGlobal
