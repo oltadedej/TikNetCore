@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using UniversityTik.DPI;
 using UniversityTik_Db.DAL;
 
 namespace UniversityTik
@@ -32,8 +33,14 @@ namespace UniversityTik
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            //konfigurimi i serviceve ne projekt
+            services.AddServices();
+            // konfigurimi i cache options
+            services.ConfigureOptions(Configuration);
 
+
+
+            services.AddControllers();
 
             //Konfigurimi i automapperit
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
