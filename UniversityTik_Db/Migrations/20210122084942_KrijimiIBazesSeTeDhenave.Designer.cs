@@ -10,8 +10,8 @@ using UniversityTik_Db.DAL;
 namespace UniversityTik_Db.Migrations
 {
     [DbContext(typeof(UniversityContext))]
-    [Migration("20201218094112_NdryshimiIEmrit")]
-    partial class NdryshimiIEmrit
+    [Migration("20210122084942_KrijimiIBazesSeTeDhenave")]
+    partial class KrijimiIBazesSeTeDhenave
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -74,7 +74,7 @@ namespace UniversityTik_Db.Migrations
                     b.Property<DateTime>("EnrollmentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")

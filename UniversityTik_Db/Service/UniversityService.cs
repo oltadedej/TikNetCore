@@ -145,5 +145,23 @@ namespace UniversityTik_Db.Service
         }
 
 
+        public async Task<CourseModel> MaximumCourse(DateTime dt1, DateTime dt2)
+        {
+
+            //var maximumCourse =  this._dbContext.Student.
+
+
+
+
+
+
+
+            return null;
+        }
+       
+
+
+
+
     }
 }
