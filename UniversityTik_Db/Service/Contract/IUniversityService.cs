@@ -17,7 +17,8 @@ namespace UniversityTik_Db.Service.Contract
         Task<IEnumerable<StudentModel>> SearchStudentsAsync(StudentSearchCriteria searchCriteria);
 
         Task<EnEntityExistsStatus> StudentExistsAsync(int Id);
-
+        Task<CourseModel> MaximumCourse(DateTime dt1, DateTime dt2);
+        Task<CourseModel> MaximumEnrollmentForAllTimes();
 
     }
 }

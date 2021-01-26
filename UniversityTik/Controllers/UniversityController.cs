@@ -154,6 +154,35 @@ namespace UniversityTik.Controllers
         }
 
 
+        [HttpGet("/course", Name = "GetCourseWithMaximumEnrollmentForDefinedDates")]
+        public async Task<ActionResult<CourseModel>> GetCourseWithMaximumEnrollmentForDefinedDates(DateTime d1, DateTime d2)
+        {
+            if (d1 == DateTime.MinValue || d2 == DateTime.MinValue)
+            {
+                return BadRequest($"Dates are not valid");
+            }
+
+            CourseModel course = await _serviceUniversityDB.MaximumCourse(d1, d2);
+            if (course != null)
+            {
+                return Ok(course);
+            }
+            return NotFound($"Dates are not valid");
+        }
+
+        [HttpGet("/course", Name = "GetCourseWithMaximumEnrollment")]
+        public async Task<ActionResult<CourseModel>> GetCourseWithMaximumEnrollment()
+        {
+          
+            CourseModel course = await _serviceUniversityDB.MaximumEnrollmentForAllTimes();
+            if (course != null)
+            {
+                return Ok(course);
+            }
+            return NoContent();
+        }
+
+
 
 
     }

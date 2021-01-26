@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +18,7 @@ using Utf8Json;
 
 namespace UniversityTik_Db.Service
 {
- public class UniversityService : BaseService<UniversityService> , IUniversityService
+    public class UniversityService : BaseService<UniversityService>, IUniversityService
     {
 
         private readonly string ServiceName = nameof(UniversityService);
@@ -148,20 +150,63 @@ namespace UniversityTik_Db.Service
         public async Task<CourseModel> MaximumCourse(DateTime dt1, DateTime dt2)
         {
 
-            //var maximumCourse =  this._dbContext.Student.
+            //join three different tables using linq
+            var result = from course in _dbContext.Course
+                         join enrollment in _dbContext.Enrollment on course.CourseId equals enrollment.CourseId
+                         select new { course.CourseId, enrollment.StudentId, course.CourseTitle } into intermediate
+                         join student in _dbContext.Student on intermediate.StudentId equals student.StudentId
+                         where student.EnrollmentDate >= dt1 && student.EnrollmentDate <= dt2
+                         group intermediate by intermediate.CourseId into g
+                         select new { courseId = g.Key, Nr_Enrollments_For_Course = g.Count() };
+            //select the course id that has the maximum enrollment for the defined period
+            var id_course = result.ToList().OrderByDescending(x => x.Nr_Enrollments_For_Course).Select(i => i.courseId).FirstOrDefault();
+            var finalresults = _dbContext.Course.Where(i => i.CourseId == id_course).FirstOrDefault();
+            return _mapper.Map<CourseModel>(finalresults);
 
-
-
-
-
-
-
-            return null;
         }
-       
+        public async Task<CourseModel> MaximumEnrollmentForAllTimes()
+        {
+
+            //join two different tables using linq
+            var result = from course in _dbContext.Course
+                         join enrollment in _dbContext.Enrollment on course.CourseId equals enrollment.CourseId
+                         group course by course.CourseId into g
+                         select new { courseId = g.Key, Nr_Enrollments_For_Course = g.Count() };
+            //select the course id that has the maximum enrollment
+            var id_course = result.ToList().OrderByDescending(x => x.Nr_Enrollments_For_Course).Select(i => i.courseId).FirstOrDefault();
+            var finalresults = _dbContext.Course.Where(i => i.CourseId == id_course).FirstOrDefault();
+            return _mapper.Map<CourseModel>(finalresults);
+
+        }
+
+        public async Task<CourseModel> CallDBUsingCMD()
+        {
+
+            string ConString = "data source=.; database=StudentDB; integrated security=SSPI";
+            using (SqlConnection connection = new SqlConnection(ConString))
+            {
+                SqlCommand cmd = new SqlCommand("queryto_execute", connection);
+                connection.Open();
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataTable Dt = new DataTable();
+                adapter.Fill(Dt);
+                var course = Dt.AsEnumerable().Select(row => new Course
+                {
+                    CourseId = Convert.ToInt32(row["CourseId"]),
+                    CourseTitle = Convert.ToString(row["CourseTitle"]),
+                    Credits = Convert.ToInt32(row["CourseTitle"]),
+
+                }).FirstOrDefault();
 
 
+                connection.Close();
+                return _mapper.Map<CourseModel>(course);
+            }
 
+
+        }
 
     }
+
+
 }
