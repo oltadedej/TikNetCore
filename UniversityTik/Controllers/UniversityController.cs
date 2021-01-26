@@ -153,6 +153,12 @@ namespace UniversityTik.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
         }
 
+        /// <summary>
+        /// GetCourse that has maximum enrollments beetween two dates
+        /// </summary>
+        /// <param name="d1"></param>
+        /// <param name="d2"></param>
+        /// <returns></returns>
 
         [HttpGet("/course", Name = "GetCourseWithMaximumEnrollmentForDefinedDates")]
         public async Task<ActionResult<CourseModel>> GetCourseWithMaximumEnrollmentForDefinedDates(DateTime d1, DateTime d2)
@@ -170,7 +176,11 @@ namespace UniversityTik.Controllers
             return NotFound($"Dates are not valid");
         }
 
-        [HttpGet("/course", Name = "GetCourseWithMaximumEnrollment")]
+        /// <summary>
+        /// Get course that has maximum enrollments 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/course/Maximum", Name = "GetCourseWithMaximumEnrollment")]
         public async Task<ActionResult<CourseModel>> GetCourseWithMaximumEnrollment()
         {
           
