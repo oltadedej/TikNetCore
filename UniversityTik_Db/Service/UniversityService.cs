@@ -153,7 +153,7 @@ namespace UniversityTik_Db.Service
             //join three different tables using linq
             var result = from course in _dbContext.Course
                          join enrollment in _dbContext.Enrollment on course.CourseId equals enrollment.CourseId
-                         select new { course.CourseId, enrollment.StudentId, course.CourseTitle } into intermediate
+                         select new { course.CourseId, enrollment.StudentId } into intermediate
                          join student in _dbContext.Student on intermediate.StudentId equals student.StudentId
                          where student.EnrollmentDate >= dt1 && student.EnrollmentDate <= dt2
                          group intermediate by intermediate.CourseId into g
@@ -164,6 +164,7 @@ namespace UniversityTik_Db.Service
             return _mapper.Map<CourseModel>(finalresults);
 
         }
+
         public async Task<CourseModel> MaximumEnrollmentForAllTimes()
         {
 
@@ -179,13 +180,15 @@ namespace UniversityTik_Db.Service
 
         }
 
+        //metoda e vjeter
         public async Task<CourseModel> CallDBUsingCMD()
         {
-
+            
             string ConString = "data source=.; database=StudentDB; integrated security=SSPI";
             using (SqlConnection connection = new SqlConnection(ConString))
             {
-                SqlCommand cmd = new SqlCommand("queryto_execute", connection);
+                string query = "Select * from Student";
+                SqlCommand cmd = new SqlCommand(query, connection);
                 connection.Open();
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable Dt = new DataTable();
@@ -198,9 +201,20 @@ namespace UniversityTik_Db.Service
 
                 }).FirstOrDefault();
 
+                Course courseToShow = new Course();
+                foreach(DataRow row in Dt.Rows)
+                {
+                    courseToShow.CourseId = Convert.ToInt32(row["CourseId"]);
+                }
 
                 connection.Close();
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Dispose();
+                }
                 return _mapper.Map<CourseModel>(course);
+
+
             }
 
 

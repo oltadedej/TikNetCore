@@ -42,7 +42,7 @@ namespace UniversityTik.Controllers
             this._serviceUniversityDB = phoneBookService ?? throw new ArgumentNullException(nameof(phoneBookService));
             this._mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-           this.cacheConfiguration = options.Value;
+            this.cacheConfiguration = options.Value;
         }
         #endregion
 
@@ -173,7 +173,8 @@ namespace UniversityTik.Controllers
             {
                 return Ok(course);
             }
-            return NotFound($"Dates are not valid");
+            //return NotFound($"Dates are not valid");
+            return NoContent();
         }
 
         /// <summary>
@@ -183,7 +184,7 @@ namespace UniversityTik.Controllers
         [HttpGet("/course/Maximum", Name = "GetCourseWithMaximumEnrollment")]
         public async Task<ActionResult<CourseModel>> GetCourseWithMaximumEnrollment()
         {
-          
+
             CourseModel course = await _serviceUniversityDB.MaximumEnrollmentForAllTimes();
             if (course != null)
             {
