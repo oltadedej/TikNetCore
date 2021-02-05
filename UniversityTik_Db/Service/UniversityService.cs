@@ -183,7 +183,7 @@ namespace UniversityTik_Db.Service
         //metoda e vjeter
         public async Task<CourseModel> CallDBUsingCMD()
         {
-            
+
             string ConString = "data source=.; database=StudentDB; integrated security=SSPI";
             using (SqlConnection connection = new SqlConnection(ConString))
             {
@@ -202,7 +202,7 @@ namespace UniversityTik_Db.Service
                 }).FirstOrDefault();
 
                 Course courseToShow = new Course();
-                foreach(DataRow row in Dt.Rows)
+                foreach (DataRow row in Dt.Rows)
                 {
                     courseToShow.CourseId = Convert.ToInt32(row["CourseId"]);
                 }
@@ -219,6 +219,55 @@ namespace UniversityTik_Db.Service
 
 
         }
+
+
+
+        public async Task<StudentModel> MaximumStudentCredits()
+        {
+
+            //join  tables using linq
+            var result = from course in _dbContext.Course
+                         join enrollment in _dbContext.Enrollment on course.CourseId equals enrollment.CourseId
+                         select new { course.CourseId, enrollment.StudentId, course.CourseTitle, enrollment.Grade, course.Credits } into intermediate
+                         join student in _dbContext.Student on intermediate.StudentId equals student.StudentId
+                         where intermediate.Grade > 4
+                         group intermediate by intermediate.StudentId into g
+                         select new { studentId = g.Key, MaximumStudentCredits = g.Sum(i => i.Credits) };
+
+            //var result1 = from student in _dbContext.Student
+            //             join enrollment in _dbContext.Enrollment on student.StudentId equals enrollment.StudentId
+            //             select new { student.StudentId, enrollment.CourseId, enrollment.Grade } into intermediate
+            //             join course in _dbContext.Course on intermediate.CourseId equals course.CourseId
+            //             where intermediate.Grade > 4
+            //             group intermediate by intermediate.StudentId into g
+            //             select new { studentId = g.Key, MaximumStudentCredits = g.Sum(i => i.) };
+
+
+            var id_student = result.ToList().OrderByDescending(x => x.MaximumStudentCredits).Select(i => i.studentId).FirstOrDefault();
+            var finalresults = _dbContext.Student.Where(i => i.StudentId == id_student).FirstOrDefault();
+            return _mapper.Map<StudentModel>(finalresults);
+        }
+
+
+        public async Task<IEnumerable<CourseModel>> CurseTeKaluaraPerStudent(int std)
+        {
+            IQueryable<Course> query = from course in _dbContext.Course
+                                       join enrollment in _dbContext.Enrollment on course.CourseId equals enrollment.CourseId
+                                       where enrollment.Grade > 4 && enrollment.StudentId == std
+                                       select course;
+
+            List<Course> courses = await query.ToListAsync();
+            if (!courses.IsNullOrEmpty())
+            {
+                return _mapper.Map<IEnumerable<CourseModel>>(courses);
+            }
+            else
+            {
+                _logger.LogWarning($"No result found.");
+            }
+            return null;
+        }
+
 
     }
 

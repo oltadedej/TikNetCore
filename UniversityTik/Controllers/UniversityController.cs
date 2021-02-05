@@ -194,6 +194,51 @@ namespace UniversityTik.Controllers
         }
 
 
+        /// <summary>
+        /// Get student details that has the maximum credits
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/student/maximum", Name = "GetStudentWithMaximumCourse")]
+        public async Task<ActionResult<StudentModel>> GetStudentWithMaximumCourse()
+        {
+
+            StudentModel student = await _serviceUniversityDB.MaximumStudentCredits();
+            if (student != null)
+            {
+                return Ok(student);
+            }
+            return NoContent();
+        }
+
+
+        /// <summary>
+        /// kurse te kaluara per student
+        /// </summary>
+        /// <param name="studentID"></param>
+        /// <returns></returns>
+        ///   /// <summary>
+        /// Get student details that has the maximum credits
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/student/kursetekaluara", Name = "KurseTeKaluara")]
+        public async Task<ActionResult<IEnumerable<Course>>> KurseTeKaluara(int studentID)
+        {
+            if (studentID > 0)
+            {
+                IEnumerable<CourseModel> courses = await _serviceUniversityDB.CurseTeKaluaraPerStudent(studentID);
+                if (courses != null && courses.Any())
+                {
+                    return Ok(courses.ToList());
+                }
+            }
+            else
+            {
+                return NoContent();
+            }
+
+            return NoContent();
+        }
+
 
 
     }
